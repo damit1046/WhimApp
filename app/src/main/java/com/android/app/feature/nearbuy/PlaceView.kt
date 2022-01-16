@@ -7,13 +7,18 @@ import com.android.app.core.platform.KParcelable
 import com.android.app.core.platform.parcelableCreator
 
 
-data class PlaceView(val id : Int,val name : String,val description : String,val location : LocationView) : KParcelable {
+data class PlaceView(val id : Int,val name : String,val description : String,val location : LocationView,val infoUrl : String, val images : List<String>) : KParcelable {
     companion object {
         @JvmField
         val CREATOR = parcelableCreator(::PlaceView)
     }
 
-    constructor(parcel: Parcel) : this(parcel.readInt(),parcel.readString()?:String.empty() ,parcel.readString()?:String.empty(),parcel.readParcelable<LocationView>(LocationView::class.java.classLoader)!!)
+    constructor(parcel: Parcel) : this(parcel.readInt(),
+        parcel.readString()?:String.empty() ,
+        parcel.readString()?:String.empty(),
+        parcel.readParcelable<LocationView>(LocationView::class.java.classLoader)!!,
+        parcel.readString()?:String.empty(),
+        parcel.readArrayList(String::class.java.classLoader) as List<String>)
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         with(dest) {
@@ -21,6 +26,8 @@ data class PlaceView(val id : Int,val name : String,val description : String,val
             writeString(name)
             writeString(description)
             writeParcelable(location,PARCELABLE_WRITE_RETURN_VALUE)
+            writeString(infoUrl)
+            writeList(images)
         }
     }
 }

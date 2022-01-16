@@ -18,6 +18,6 @@ class PlaceViewModel @Inject constructor(private val getPlaces : GetPlaces) : Ba
         getPlaces(UseCase.None(), viewModelScope) { it.fold(::handleFailure, ::handlePlaceList) }
 
     private fun handlePlaceList(places: List<Place>) {
-        _places.value = places.map { PlaceView(it.id, it.name,it.description,LocationView(it.location.lat,it.location.lon,it.location.address)) }
+        _places.value = places.map { PlaceView(it.id, it.name,it.description,LocationView(it.location.lat,it.location.lon,it.location.address),it.infoUrl,it.images) }
     }
 }

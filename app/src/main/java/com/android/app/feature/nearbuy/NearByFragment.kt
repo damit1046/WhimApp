@@ -10,12 +10,14 @@ import com.android.app.core.extension.observe
 import com.android.app.core.navigation.Navigator
 import com.android.app.core.platform.BaseFragment
 import com.android.app.feature.location.CurrentLocation
+import com.android.app.feature.placedetail.PlaceDetailBottomSheetDialog
 import com.android.app.whimapp.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -46,14 +48,17 @@ class NearByFragment : BaseFragment(), OnMapReadyCallback, CurrentLocation.Curre
 
     private fun renderPlacesList(places: List<PlaceView>?) {
         if(initMap){
-            places?.forEach {
-                val location  = LatLng((it.location.lat), it.location.long)
+            places?.forEachIndexed { index, place ->
+                val location  = LatLng((place.location.lat), place.location.long)
+
                 map.addMarker(
                     MarkerOptions()
                         .position(location)
-                        .title(it.name)
-                        .snippet("\n${it.description}\n\n${it.location.address}")
-                )
+                        .title(place.name)
+                        .snippet("\n${place.description}\n\n${place.location.address}")
+                ).apply {
+                    this?.tag = index
+                }
             }
             updateCurrentLocation()
         }
@@ -79,9 +84,19 @@ class NearByFragment : BaseFragment(), OnMapReadyCallback, CurrentLocation.Curre
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map.setInfoWindowAdapter(PlaceInfoAdapter(requireContext()))
         initMap = true
         renderPlacesList(placeViewModel.places.value)
+        map.setOnMarkerClickListener {
+           if(it.tag is Int){
+               val position = it.tag as Int
+               placeViewModel.places.value?.get(position)?.let { placeView ->
+                   PlaceDetailBottomSheetDialog.show(requireContext(),
+                       placeView
+                   )
+               }
+           }
+            true
+        }
     }
 
     private fun handleFailure(failure: Failure?) {

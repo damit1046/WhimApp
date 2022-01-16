@@ -7,5 +7,7 @@
     <string name="failure_server_error">Server Error</string>
     <string name="failure_place_list_unavailable">Place Unavailable.</string>
     <string name="failure_place_non_existent">Place Not Existent.</string>
+    <string name="wikipedia">Info</string>
+    <string name="err_no_app_found">Please install google map</string>
 
 </resources>
