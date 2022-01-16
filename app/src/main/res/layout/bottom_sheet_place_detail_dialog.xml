@@ -25,10 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintHorizontal_bias="0"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="POI Title" />
