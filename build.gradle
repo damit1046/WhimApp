@@ -45,6 +45,10 @@ ext{
     retrofit = "2.9.0"
     okHttpLoggingInterceptor = "4.9.0"
     coroutines = "1.5.2"
+    junit4 = "4.13.1"
+    mockk = "1.10.0"
+    robolectric = "4.5"
+    kluent = "1.14"
 }
 
 
